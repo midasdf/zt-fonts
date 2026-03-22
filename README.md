@@ -18,6 +18,21 @@ curl -Lo src/fonts/ufo-nf.bin https://github.com/midasdf/zt-fonts/raw/main/ufo-n
 | [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts) | ~4.6K | Developer icons (Devicons, Font Awesome, Octicons, Powerline, etc.) |
 | [GNU Unifont Upper](https://unifoundry.com/unifont/) | ~3K | Emoji and Plane 1 symbols (16x16 native bitmaps) |
 
+## Pre-built blobs
+
+| File | Size | Contents |
+|------|------|----------|
+| `ufo-nf.bin` | 2.8 MB | UFO + Nerd Fonts + Unifont emoji (recommended) |
+| `ufo.bin` | 2.6 MB | UFO only |
+| `plemoljp-console-nf.bin` | 1.2 MB | PlemolJP Console NF |
+
+## BDF sources
+
+| File | Size | Source |
+|------|------|--------|
+| `ufo.bdf` | 9.0 MB | [UFO](https://github.com/akahuku/ufo) — Japanese bitmap font |
+| `plemoljp-console-nf.bdf` | 4.2 MB | [PlemolJP](https://github.com/yuru7/PlemolJP) Console NF — TTF→BDF rendered |
+
 ## Font format
 
 8-byte header + glyph table + bitmap data. Each glyph entry is 16 bytes: codepoint (u32), width (u16), height (u16), bitmap offset (u32), bitmap length (u16), padding (u16). Glyphs sorted by codepoint for binary search.
