@@ -16,13 +16,28 @@ Binary format:
     Raw bitmap bytes (1 bit per pixel, row-major, packed)
 """
 
+import os
+import pathlib
 import struct
 import sys
 import re
 
+ALLOWED_BASE_DIR = pathlib.Path(__file__).parent.parent.resolve()
+
+
+def safe_path(path):
+    """Resolve and validate a file path to prevent path traversal."""
+    resolved = pathlib.Path(os.path.expanduser(path)).resolve()
+    try:
+        resolved.relative_to(ALLOWED_BASE_DIR)
+    except ValueError:
+        raise ValueError(f"Path '{path}' is outside the allowed directory")
+    return str(resolved)
+
 
 def parse_bdf(path):
     glyphs = []
+    path = safe_path(path)
     with open(path, 'r') as f:
         in_char = False
         in_bitmap = False
@@ -77,6 +92,7 @@ def write_blob(glyphs, output_path):
 
     bitmap_total = len(bitmap_data)
 
+    output_path = safe_path(output_path)
     with open(output_path, 'wb') as f:
         # Header
         f.write(struct.pack('<II', glyph_count, bitmap_total))

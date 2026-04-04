@@ -4,11 +4,26 @@
 Usage: python3 merge_blobs.py <base.bin> <supplement.bin> <output.bin>
 """
 
+import os
+import pathlib
 import struct
 import sys
 
+ALLOWED_BASE_DIR = pathlib.Path(__file__).parent.parent.resolve()
+
+
+def safe_path(path):
+    """Resolve and validate a file path to prevent path traversal."""
+    resolved = pathlib.Path(os.path.expanduser(path)).resolve()
+    try:
+        resolved.relative_to(ALLOWED_BASE_DIR)
+    except ValueError:
+        raise ValueError(f"Path '{path}' is outside the allowed directory")
+    return str(resolved)
+
 
 def read_blob(path):
+    path = safe_path(path)
     with open(path, 'rb') as f:
         data = f.read()
 
@@ -28,6 +43,7 @@ def read_blob(path):
 
 
 def write_blob(glyphs, path):
+    path = safe_path(path)
     # Sort by codepoint
     glyphs.sort(key=lambda g: g[0])
 

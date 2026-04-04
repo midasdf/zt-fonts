@@ -8,13 +8,28 @@ The HEX format is: CODEPOINT:HEXBITMAP (one per line)
 - 64 hex digits = 16x16 (full-width)
 """
 
+import os
+import pathlib
 import struct
 import sys
+
+ALLOWED_BASE_DIR = pathlib.Path(__file__).parent.parent.resolve()
+
+
+def safe_path(path):
+    """Resolve and validate a file path to prevent path traversal."""
+    resolved = pathlib.Path(os.path.expanduser(path)).resolve()
+    try:
+        resolved.relative_to(ALLOWED_BASE_DIR)
+    except ValueError:
+        raise ValueError(f"Path '{path}' is outside the allowed directory")
+    return str(resolved)
 
 
 def parse_hex_file(path, ranges=None):
     """Parse a Unifont HEX file, optionally filtering by codepoint ranges."""
     glyphs = []
+    path = safe_path(path)
     with open(path, 'r') as f:
         for line in f:
             line = line.strip()
@@ -52,6 +67,7 @@ def write_blob(glyphs, path):
         bitmap_data.extend(bmp)
         entries.append((cp, w, h, offset, len(bmp)))
 
+    path = safe_path(path)
     with open(path, 'wb') as f:
         f.write(struct.pack('<II', len(entries), len(bitmap_data)))
         for cp, w, h, offset, bmp_len in entries:
