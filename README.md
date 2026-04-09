@@ -84,3 +84,6 @@ See [FONT_LICENSES.md](FONT_LICENSES.md) for detailed attribution.
 - UFO: GPL-2.0+ with font embedding exception
 - GNU Unifont Upper: GPL-2.0+ with font embedding exception
 - Nerd Fonts: MIT / OFL-1.1 / CC-BY-4.0 / Apache-2.0 (per glyph set)
+
+## Disclaimer
+This project uses AI-generated code (LLM). I do my best to review and test it, but I can't guarantee it's perfect. Please use it at your own risk.\n
